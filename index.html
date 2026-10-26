@@ -52,6 +52,7 @@ textarea{min-height:70px;resize:vertical}
 .photos .x{position:absolute;top:-8px;right:-8px;width:32px;height:32px;border-radius:16px;border:2px solid #a33;background:#fff;color:#a33;font-weight:800}
 .filebtn{display:inline-flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .filebtn input{position:absolute;inset:0;opacity:0;font-size:100px}
+.tkey{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.35}
 .legend{font-size:14px;line-height:1.5;color:#333}
 .disc{font-size:13px;color:#444}
 .saved{font-size:12px;color:var(--muted)}
@@ -147,7 +148,7 @@ var CHECKS=[
  {s:"Not propped / wedged (hold-open tied to alarm?)",fix:"Magnetic hold-open or closer-holder tied to the fire alarm",cond:"Door propped or wedged open"},
  {s:"Panic / exit hardware works",fix:"Repair with rebuild kit or replace exit device",cond:"Panic / exit hardware not working properly"},
  {s:"Coordinator / astragal / seals (pairs)",fix:"Install / repair coordinator, astragal, gasketing",cond:"Coordinator, astragal, or seals missing or damaged"}];
-var TYPES=[["ST","Stair"],["CO","Corridor"],["EX","Exit"],["EN","Entrance"],["SX","Smoke / X-corr"],["OT","Other"]];
+var TYPES=[["CO","Corridor"],["ST","Stair"],["EX","Exit"],["EN","Entrance"],["SX","Smoke / Cross-corridor"],["OT","Other"]];
 var NEXT={"":"G","G":"Y","Y":"P","P":""}, RANK={"":0,"G":1,"Y":2,"P":3}, NAME={G:"Green - Good",Y:"Yellow - Watch",P:"Pink - Fix now","":"Not scored"};
 var S=load();
 function blank(){return {h:{date:new Date().toISOString().slice(0,10),surveyor:"Donald Steffenson"},doors:[],nextPhoto:1};}
@@ -164,7 +165,7 @@ function seg(name,opts,val,i){return '<div class="seg">'+opts.map(function(o){re
 function doorHTML(d,i){var o=overall(d);
  return '<div class="card door o'+o+'" id="door'+i+'"><div class="dhead"><span class="dnum">#</span><input type="text" data-i="'+i+'" data-f="num" value="'+esc(d.num)+'" style="max-width:110px" aria-label="Door number">'+
  '<input type="text" data-i="'+i+'" data-f="loc" value="'+esc(d.loc)+'" placeholder="Location (e.g., Stair B, Level 2)"><button class="btn sm warn" data-del="'+i+'">Delete</button></div>'+
- '<div class="grid2" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)"><div><label class="fl">Door type</label>'+seg("type",TYPES,d.type,i)+'</div><div><label class="fl">Rated?</label>'+seg("rated",[["Y","Yes"],["N","No"],["?","Unknown"]],d.rated,i)+'</div></div>'+
+ '<div class="grid2" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)"><div><label class="fl">Door type</label>'+seg("type",TYPES,d.type,i)+'<div class="tkey">CO Corridor &middot; ST Stair &middot; EX Exit &middot; EN Entrance &middot; SX Smoke/Cross-corridor &middot; OT Other</div></div><div><label class="fl">Rated?</label>'+seg("rated",[["Y","Yes"],["N","No"],["?","Unknown"]],d.rated,i)+'</div></div>'+
  '<div class="checks">'+d.checks.map(function(c,k){return '<button class="ck '+c+'" data-i="'+i+'" data-k="'+k+'"><span><span class="n">'+(k+1)+'</span> '+esc(CHECKS[k].s)+'</span><span class="st">'+(c||"&mdash;")+'</span></button>';}).join("")+'</div>'+
  '<div class="ovr"><label class="fl">Overall</label><span class="badge '+o+'">'+(o?o+" "+NAME[o].split(" - ")[1]:"Not scored")+'</span>'+
  '<select data-i="'+i+'" data-f="ovr" style="max-width:230px"><option value="">Auto (worst check)</option><option value="G"'+(d.ovr==="G"?" selected":"")+'>Override: Green</option><option value="Y"'+(d.ovr==="Y"?" selected":"")+'>Override: Yellow</option><option value="P"'+(d.ovr==="P"?" selected":"")+'>Override: Pink</option></select></div>'+
